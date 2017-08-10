@@ -1,37 +1,111 @@
-## Welcome to GitHub Pages
-
-You can use the [editor on GitHub](https://github.com/belram/lessons/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
 ```markdown
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<title>Введение в PHP</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<?php 
+	$title = 'Страница пользователя Николай';
+	$name = 'Имя';
+	$a = 'Николай';
+	$age = 'Возраст';
+	$b = 30;
+	$mail = 'Адрес электронной почты';
+	$c = 'gor20@tut.by';
+	$city = 'Город';
+	$d = 'Минск';
+	$about_your_self = 'О себе';
+	$i = 'Ищу работу';
+	 ?>
+	
+	 <style>
+	 h1 {
+	 	padding-bottom: 10px;
+	 }
+	 td {
+	 	padding-bottom: 5px;
+	 	padding-right: 10px;
+	 }
+	 </style>
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
 
-**Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
+	<h1>
+	<?php 
+	echo $title;
+	 ?>
+	</h1>
+	<table>
+		<tr>
+			<td>
+				<?php 
+				echo $name;
+				 ?>
+			</td>
+			<td>
+				<?php 
+				echo $a;
+				 ?>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php 
+				echo $age;
+				 ?>
+			</td>
+			<td>
+				<?php 
+				echo $b;
+				 ?>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php 
+				echo $mail;
+				 ?>
+			</td>
+			<td>
+				<a href="mailto:gor20@tut.by">
+					<?php 
+					echo $c;
+					 ?>
+				</a>	 
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php 
+				echo $city;
+				 ?>
+			</td>
+			<td>
+				<?php 
+				echo $d;
+				 ?>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php 
+				echo $about_your_self;
+				 ?>
+			</td>
+			<td>
+				<?php 
+				echo $i;
+				 ?>
+			</td>
+		</tr>
+
+	</table>
+</body>
+</html>
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/belram/lessons/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
