@@ -20,7 +20,6 @@
 	$about_your_self = 'О себе';
 	$i = 'Ищу работу';
 	 ?>
-	
 	 <style>
 	 h1 {
 	 	padding-bottom: 10px;
@@ -30,10 +29,7 @@
 	 	padding-right: 10px;
 	 }
 	 </style>
-
-
-
-
+	
 	<h1>
 	<?php 
 	echo $title;
