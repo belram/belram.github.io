@@ -5,7 +5,6 @@
 </head>
 <body>
 
-<p>
 <?php
 $jsonString = file_get_contents('country.json');
 $data = json_decode($jsonString, true);
@@ -26,6 +25,9 @@ $data = json_decode($jsonString, true);
 </tr>
 <?php } ?>
 </table>
+
+</body>
+</html>
 
 [
 	{"firstName": "Иван", "lastName": "Иванов", "address": "г.Москва, ул. Алиева,2", "phoneNumber": "812 123-1234"},
