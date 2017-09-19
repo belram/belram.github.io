@@ -7,20 +7,67 @@ $animal = array(
 	'Australia' => array('Macropus', 'Phascolarctos cinereus', 'Thylacinus cynocephalus')
 	);
 
-$animal2 = [];
-foreach ($animal as $crr) {
-    $animal2 = array_merge($animal2, array_filter($crr, function ($item){ return count(explode(' ', $item)) === 2; }) );
+foreach($animal as $key => $value){
+	foreach ($value as $two_words) {
+		if(strpos($two_words, ' ') != false){
+			$animal_two_words[] = $two_words;
+		}
+	}
 }
-print_r($animal2);
-    
-$firstname = $lastname = [];
 
-foreach($animal2 as $volume)
-    list($firstname[], $lastname[]) = explode(' ', $volume);
+// print_r($animal_two_words);
 
-shuffle($lastname);
+foreach ($animal_two_words as $separate) {
+	$middle = explode(" ", $separate);
+    $first_name[] = $middle[0];
+    $second_name[] = $middle[1];
+}
 
-foreach($lastname as $key=>$ln)
-    echo "{$firstname[$key]} {$ln}" . PHP_EOL;
+shuffle($second_name);
 
- ?>
+$p=0;
+$y=0;
+while(($p < count($first_name)) && ($y < count($second_name))){
+	foreach($first_name as $value1){
+		foreach($second_name as $value2){
+			$fin[$p] = "$value1 $second_name[$y]";
+			$p++;
+			$y++;
+			break;
+		}
+	}
+}
+
+print_r($fin);
+
+// Получение ключей в той последовательности, в которой
+// заданы названия животных
+
+foreach($animal as $key_f => $value_f){
+	foreach($value_f as $key_n => $value_n){
+		foreach ($animal_two_words as $key_s => $value_s){
+			if(strpos($value_n, $value_s) !== false){
+				$last_array_key[] = $key_f;
+			}
+		}
+	}	
+}
+
+// print_r($last_array_key);
+
+
+$result = <<<HTML
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+
+
+
+</body>
+</html>
+HTML
+ 
+?>
