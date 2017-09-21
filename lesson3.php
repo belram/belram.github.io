@@ -51,8 +51,6 @@ while($y < count($second_name)){//условия цикла, при которо
 	}
 }
 
-//
-
 print_r($fin);
 
 ?>
