@@ -17,11 +17,11 @@ foreach($animal as $key => $value){
 			$middle = explode(" ", $two_words);
 			$first_name[] = $middle[0];
     		$second_name[] = $middle[1];
-    		shuffle($second_name);
 		}
 	}
 }
 
+shuffle($second_name);
 
 $fin = [];
 
