@@ -46,13 +46,32 @@
  	</style>
 
 <div> 
-<form method="post" action="list.php"  enctype="multipart/form-data">
+<form method="post" action="admin.php" enctype="multipart/form-data">
 	<input class="choice" type="file" name="myfile" value="a1"><br>
 	<input class="reset" type="reset" value="Отмена">
 	<input class="dispatch" type="submit" value="Отправить">
  </form>
  <a href="list.php">Список тестов</a>
-</div>
 
+<?php
+
+if(substr(($_FILES['myfile']['name']), -4) == 'json'){
+	if(isset($_FILES['myfile']) && !empty($_FILES['myfile']['name'])){
+	 	if($_FILES['myfile']['error'] == UPLOAD_ERR_OK &&
+	 		move_uploaded_file($_FILES['myfile']['tmp_name'], "tests/" . $_FILES['myfile']['name']))
+	 	{
+	 		echo "Файл загружен: " . $_FILES['myfile']['name'] . "\n";
+	 		
+	 	}
+	 	else {
+	 		echo "Ошибка: повторите попытку";
+	 	}
+	 }
+}else{
+	echo "Недопустимый формат файла";
+}
+
+?>
+</div>
 </body>
 </html>
