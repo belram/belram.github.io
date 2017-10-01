@@ -16,8 +16,6 @@
 
 <?php
 
-print_r($_GET);
-
 $next_data = [];
 foreach ($_GET as $key => $value) {
 	$clear_key = htmlspecialchars(("$key"));
