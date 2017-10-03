@@ -68,12 +68,8 @@ print '</form>';
 
 if(isset($_POST)){
 	$result = [];
-	$w = 0;
 	foreach($_POST as $f_key => $f_vel){
 		$result[$f_key] = htmlspecialchars(("$f_vel"));
-		foreach($correct as $ques => $cor){
-
-		}
 	}
 }
 
