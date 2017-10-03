@@ -46,7 +46,7 @@ foreach($data as $num => $val){
 		if($num_2 == 'correct'){
 			$cor = "$val[$num_2]";
 			$corStr = (string)$cor;
-			$correct[] = htmlspecialchars(("$corStr"));
+			$correct["q$i"] = htmlspecialchars(("$corStr"));
 		}
 		if((is_array($val_2)) !== false){
 			foreach($val_2 as $num_3 => $val_3){
@@ -68,17 +68,28 @@ print '</form>';
 
 if(isset($_POST)){
 	$result = [];
+	$w = 0;
 	foreach($_POST as $f_key => $f_vel){
-		$result[] = filter_input(INPUT_POST, "$f_key", FILTER_SANITIZE_SPECIAL_CHARS);
+		$result[$f_key] = htmlspecialchars(("$f_vel"));
+		foreach($correct as $ques => $cor){
+
+		}
 	}
 }
 
-print 'Вы правильно ответиль на вопросы: ';
-for($m = 0, $w = 1; $m < count($result); $m++, $w++){
-		if($correct[$m] === $result[$m]){
-			print "$w ";
-		}
-	}
+if($result){
+	$w = 0;
+	foreach($correct as $ques => $cor){
+ 		foreach($result as $var_qs => $var_ans){
+ 			if($ques == $var_qs){
+ 				if($cor == $var_ans){
+ 					$w++;
+ 				}
+ 			}
+ 		}
+ 	}
+ 	print 'Вы дали ' . $w . ' правильных ответа!';
+}
 
 ?>
 </body>
