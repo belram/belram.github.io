@@ -54,23 +54,20 @@
  <a href="list.php">Список тестов</a>
 
 <?php
-
-if(substr(($_FILES['myfile']['name']), -4) == 'json'){
-	if(isset($_FILES['myfile']) && !empty($_FILES['myfile']['name'])){
+if(isset($_FILES['myfile']) && !empty($_FILES['myfile']['name'])){
+	if(substr(($_FILES['myfile']['name']), -4) == 'json'){
 	 	if($_FILES['myfile']['error'] == UPLOAD_ERR_OK &&
 	 		move_uploaded_file($_FILES['myfile']['tmp_name'], "tests/" . $_FILES['myfile']['name']))
 	 	{
-	 		echo "Файл загружен: " . $_FILES['myfile']['name'] . "\n";
-	 		
+	 		echo "Файл загружен: " . $_FILES['myfile']['name'] . "\n";		
 	 	}
 	 	else {
 	 		echo "Ошибка: повторите попытку";
 	 	}
-	 }
-}else{
-	echo "Недопустимый формат файла";
+ 	}else{
+		echo "Недопустимый формат файла";
+	}
 }
-
 ?>
 </div>
 </body>
