@@ -1,19 +1,18 @@
 <?php
-if(substr(($_FILES['myfile']['name']), -4) == 'json'){
-	if(isset($_FILES['myfile']) && !empty($_FILES['myfile']['name'])){
+if(isset($_FILES['myfile']) && !empty($_FILES['myfile']['name'])){
+	if(substr(($_FILES['myfile']['name']), -4) == 'json'){
 	 	if($_FILES['myfile']['error'] == UPLOAD_ERR_OK &&
 	 		move_uploaded_file($_FILES['myfile']['tmp_name'], "tests/" . $_FILES['myfile']['name']))
 	 	{
-			header("Location:list.php");
+	 		header("Location: list.php");		
 	 	}
 	 	else {
 	 		echo "Ошибка: повторите попытку";
 	 	}
-	 }
-}else{
-	echo "Недопустимый формат файла";
+ 	}else{
+		echo "Недопустимый формат файла";
+	}
 }
-
 ?>
  <!DOCTYPE html>
  <html>
@@ -68,7 +67,6 @@ if(substr(($_FILES['myfile']['name']), -4) == 'json'){
 	<input class="reset" type="reset" value="Отмена">
 	<input class="dispatch" type="submit" name="done" value="Отправить">
  </form>
-
 </div>
 </body>
 </html>
