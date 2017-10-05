@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,11 +33,15 @@ $loaded_files = scandir($dir);
 	<?php foreach ($loaded_files as $key => $value) {
 		if(($value !== '.') && ($value !== '..')){?>
 	<tr>
-		<td><?php print $key ?></td>
+		<td><?php 
+		$s_value = substr($value, 0, 3);
+		$i_value = (int)$s_value;
+		print $i_value;
+		 ?></td>
 		<td><?php print $value ?></td>
 		<td>
 			<form method="get" action="test.php">
-				<input type="submit" name=<?php print '"' . $key . '"'?> value=<?php print '"' . $value . '"'?>>
+				<input type="submit" name="id" value=<?php print '"' . $i_value . '"'?>>
 			</form>
 		</td>
 	</tr>
