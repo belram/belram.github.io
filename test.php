@@ -18,17 +18,13 @@
 
 $next_data = [];
 foreach ($_GET as $key => $value) {
-	$clear_key = htmlspecialchars(("$key"));
-	$clear_value = htmlspecialchars(("$value"));
-	if((substr($clear_value, -4)) == 'json'){
-		$file_name = "tests/" . $clear_value;
-		$jsonString = file_get_contents("$file_name");
-		$data = json_decode($jsonString, true);
-		global $next_data;
-		$next_data = $data;
-	}else{
-		print 'Недопустимый формат файла';
-	}
+	$clear_key = htmlspecialchars("$key");
+	$clear_value = htmlspecialchars("$value");
+	$file_name = "tests/" . $clear_value . "test.json";
+	$jsonString = file_get_contents("$file_name");
+	$data = json_decode($jsonString, true);
+	global $next_data;
+	$next_data = $data;
 }
 
 $correct = [];
@@ -40,20 +36,20 @@ foreach($data as $num => $val){
 	foreach($val as $num_2 => $val_2){
 		if((strpos($num_2, 'question')) !== false){
 			print '<fieldset>' . "<br>\n";
-			print '<legend>' . htmlspecialchars(("$val[$num_2]")) . '</legend>' . "<br>\n";
+			print '<legend>' . htmlspecialchars("$val[$num_2]") . '</legend>' . "<br>\n";
 		}
 		global $correct;
 		if($num_2 == 'correct'){
 			$cor = "$val[$num_2]";
 			$corStr = (string)$cor;
-			$correct["q$i"] = htmlspecialchars(("$corStr"));
+			$correct["q$i"] = htmlspecialchars("$corStr");
 		}
 		if((is_array($val_2)) !== false){
 			foreach($val_2 as $num_3 => $val_3){
 				global $i;
 				$varStr = $val_3;
 				$i_varStr = (int)$varStr;
-				print '<input type="radio" name="q' . "$i" . '" value="' . htmlspecialchars(("$num_3")) .  '">' . htmlspecialchars(("$i_varStr")) . "<br>\n";
+				print '<input type="radio" name="q' . "$i" . '" value="' . htmlspecialchars(("$num_3")) .  '">' . htmlspecialchars("$i_varStr") . "<br>\n";
 			}
 			print '</fieldset>' . "<br>\n";		
 		}
