@@ -34,14 +34,12 @@ $loaded_files = scandir($dir);
 		if(($value !== '.') && ($value !== '..')){?>
 	<tr>
 		<td><?php 
-		$s_value = substr($value, 0, 3);
-		$i_value = (int)$s_value;
-		print $i_value;
+		print (int)$value;
 		 ?></td>
 		<td><?php print $value ?></td>
 		<td>
 			<form method="get" action="test.php">
-				<input type="submit" name="id" value=<?php print '"' . $i_value . '"'?>>
+				<input type="submit" name="id" value=<?php print '"' . (int)$value . '"'?>>
 			</form>
 		</td>
 	</tr>
