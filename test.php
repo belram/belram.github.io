@@ -18,9 +18,9 @@
 
 $next_data = [];
 foreach ($_GET as $key => $value) {
-	$clear_key = htmlspecialchars("$key");
-	$clear_value = htmlspecialchars("$value");
-	$file_name = "tests/" . $clear_value . "test.json";
+	$clear_key = htmlspecialchars($key);
+	$clear_value = htmlspecialchars($value);
+	$file_name = 'tests/' . $clear_value . 'test.json';
 	$jsonString = file_get_contents("$file_name");
 	$data = json_decode($jsonString, true);
 	global $next_data;
@@ -36,20 +36,18 @@ foreach($data as $num => $val){
 	foreach($val as $num_2 => $val_2){
 		if((strpos($num_2, 'question')) !== false){
 			print '<fieldset>' . "<br>\n";
-			print '<legend>' . htmlspecialchars("$val[$num_2]") . '</legend>' . "<br>\n";
+			print '<legend>' . htmlspecialchars($val[$num_2]) . '</legend>' . "<br>\n";
 		}
 		global $correct;
 		if($num_2 == 'correct'){
-			$cor = "$val[$num_2]";
-			$corStr = (string)$cor;
-			$correct["q$i"] = htmlspecialchars("$corStr");
+			$correct["q$i"] = htmlspecialchars($val[$num_2]);
 		}
 		if((is_array($val_2)) !== false){
 			foreach($val_2 as $num_3 => $val_3){
 				global $i;
 				$varStr = $val_3;
 				$i_varStr = (int)$varStr;
-				print '<input type="radio" name="q' . "$i" . '" value="' . htmlspecialchars(("$num_3")) .  '">' . htmlspecialchars("$i_varStr") . "<br>\n";
+				print '<input type="radio" name="q' . "$i" . '" value="' . htmlspecialchars($num_3) .  '">' . htmlspecialchars($i_varStr) . "<br>\n";
 			}
 			print '</fieldset>' . "<br>\n";		
 		}
@@ -65,7 +63,7 @@ print '</form>';
 if(isset($_POST)){
 	$result = [];
 	foreach($_POST as $f_key => $f_vel){
-		$result[$f_key] = htmlspecialchars(("$f_vel"));
+		$result[$f_key] = htmlspecialchars($f_vel);
 	}
 }
 
