@@ -17,7 +17,7 @@ console.log('Дополнительное гарантийное обслужи�
 var yourString = 'I like JS and PHP';
 
 function getPicturePrice(yourString) {
-  if((!!yourString) !== false) {
+  if(!!yourString) {
     var count = yourString.split(' ');
     return count.length * 11;
   } else {
@@ -39,7 +39,7 @@ var data = {
 var needDestination = 'yes';
 var deliveryDestination = 'Крабовидная туманность';
 
-function countDelivery(deliveryDestination, needDestination) {
+function countDelivery(needDestination, deliveryDestination) {
   if(!!needDestination) {
     if(deliveryDestination in data) {
       var priceDelivery = data[deliveryDestination];
@@ -52,9 +52,9 @@ function countDelivery(deliveryDestination, needDestination) {
   }
 }
 
-function showResult(deliveryDestination, needDestination){
-  var totalRes = countDelivery(deliveryDestination, needDestination);
-  if(isNaN(totalRes)) {
+function showResult(needDestination, deliveryDestination){
+  var totalRes = countDelivery(needDestination, deliveryDestination);
+  if(Number.isNaN(totalRes)) {
     console.log('Ошибка при расчете стоимости доставки.');  
   } else if(totalRes === 0) {
     console.log('Доставка не требуется.');
@@ -63,13 +63,13 @@ function showResult(deliveryDestination, needDestination){
   }
 }
 
-showResult(deliveryDestination, needDestination);
+showResult(needDestination, deliveryDestination);
 
 //Part 4
 
-var pictureBill, deliveryBill, guaranteeBill, termGuarantee = 1;
+var termGuarantee = 1, allInfo;
 
-function showAllInfo(termGuarantee, yourString, deliveryDestination, needDestination){
+function showAllInfo(termGuarantee, yourString, needDestination, deliveryDestination){
   
   function chooseGuarantee(termGuarantee) {
     if(termGuarantee === 1) {
@@ -81,10 +81,10 @@ function showAllInfo(termGuarantee, yourString, deliveryDestination, needDestina
     }
   }
   
-  guaranteeBill = chooseGuarantee(termGuarantee);
+  var guaranteeBill = chooseGuarantee(termGuarantee);
   
   function getPicturePrice(yourString) {
-    if((!!yourString) !== false) {
+    if(!!yourString) {
       var count = yourString.split(' ');
       return count.length * 11;
     } else {
@@ -92,9 +92,9 @@ function showAllInfo(termGuarantee, yourString, deliveryDestination, needDestina
     }
   }
   
-  pictureBill = getPicturePrice(yourString);
+  var pictureBill = getPicturePrice(yourString);
   
-  function countDelivery(deliveryDestination, needDestination) {
+  function countDelivery(needDestination, deliveryDestination) {
     if(!!needDestination) {
       if(deliveryDestination in data) {
         var priceDelivery = data[deliveryDestination];
@@ -107,16 +107,18 @@ function showAllInfo(termGuarantee, yourString, deliveryDestination, needDestina
     }
   }
   
-  deliveryBill = countDelivery(deliveryDestination, needDestination);
-  deliveryBill = (isNaN(deliveryBill)) ? 0: deliveryBill;
+  var deliveryBill = countDelivery(needDestination, deliveryDestination);
+  deliveryBill = (Number.isNaN(deliveryBill)) ? 0: deliveryBill;
   
   var totalBill = guaranteeBill + pictureBill + deliveryBill;
   
-  return totalBill;
+  return [totalBill, guaranteeBill, pictureBill, deliveryBill];
 }
 
-console.log(`Общая стоимость заказа: ${showAllInfo(termGuarantee, yourString, deliveryDestination, needDestination)} Q.
-Из них ${guaranteeBill} Q за гарантийное обслуживание на ${termGuarantee} год/года.
-Гравировка на сумму ${pictureBill} Q.
-Доставка в область ${deliveryDestination}: ${deliveryBill} Q.`
+allInfo = showAllInfo(termGuarantee, yourString, needDestination, deliveryDestination);
+
+console.log(`Общая стоимость заказа: ${allInfo[0]} Q.
+Из них ${allInfo[1]} Q за гарантийное обслуживание на ${termGuarantee} год/года.
+Гравировка на сумму ${allInfo[2]} Q.
+Доставка в область ${deliveryDestination}: ${allInfo[3]} Q.`
   );
