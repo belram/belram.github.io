@@ -73,10 +73,10 @@ const producer3 = {
 var date3 = new Date(2015, 11, 29);
 
 function deferPay(producer, amount, date) {
-  var paymentDate = date;
-  paymentDate.setDate(paymentDate.getDate() + producer['deferPeriod']);
+	var paymentDate = new Date(date.getTime());
+	paymentDate.setDate(paymentDate.getDate() + producer['deferPeriod']);
 
-	deferedPayments.push({'producer': {'name': producer['name']},
+	deferedPayments.push({'producer': producer,
 	'amount': amount,
 	'paymentDate': paymentDate});
 }
@@ -98,19 +98,20 @@ function loadCurrencyJSON() {
 var currencyExchange;
 
 function convertCurrency(amount, from, to) {
-  currencyExchange = JSON.parse(loadCurrencyJSON());
-	var result = amount * (currencyExchange[from] / currencyExchange[to]);
-	return Math.round(result * 100) / 100;
+	var currencyExchange;
+	try{
+		currencyExchange = JSON.parse(loadCurrencyJSON());
+		var result = amount * (currencyExchange[from] / currencyExchange[to]);
+		
+		return Math.round(result * 100) / 100;
+	}catch(e){
+		console.error(e.name, e.message);
+	}
 }
 
-try{
-  if(loadCurrencyJSON()){
-    var price1 = convertCurrency(7000, 'ZZZ', 'USD');
-    var price2 = convertCurrency(790, 'EUR', 'ZZZ');
-  }
-}catch(err){
-	console.error(err.name, err.message);
-}
+var price1 = convertCurrency(7000, 'ZZZ', 'USD');
+var price2 = convertCurrency(790, 'EUR', 'ZZZ');
 
 console.log(`Сумма ${price1} USD`);
 console.log(`Сумма ${price2} Q`);
+
