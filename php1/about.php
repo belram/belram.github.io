@@ -5,7 +5,8 @@
 	<meta charset="utf-8">
 </head>
 <body>
-	<?php 
+
+	<? 
 	$title = 'Страница пользователя Николай';
 	$name = 'Имя';
 	$a = 'Николай';
@@ -29,75 +30,50 @@
 	 }
 	 </style>
 
-
-
-
 	<h1>
-	<?php 
-	echo $title;
-	 ?>
+	<?	echo $title; ?>
 	</h1>
 	<table>
 		<tr>
 			<td>
-				<?php 
-				echo $name;
-				 ?>
+				<? echo $name; ?>
 			</td>
 			<td>
-				<?php 
-				echo $a;
-				 ?>
+				<? echo $a; ?>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<?php 
-				echo $age;
-				 ?>
+				<? echo $age; ?>
 			</td>
 			<td>
-				<?php 
-				echo $b;
-				 ?>
+				<? echo $b; ?>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<?php 
-				echo $mail;
-				 ?>
+				<? echo $mail; ?>
 			</td>
 			<td>
 				<a href="mailto:gor20@tut.by">
-					<?php 
-					echo $c;
-					 ?>
+					<? echo $c; ?>
 				</a>	 
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<?php 
-				echo $city;
-				 ?>
+				<? echo $city; ?>
 			</td>
 			<td>
-				<?php 
-				echo $d;
-				 ?>
+				<? echo $d; ?>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<?php 
-				echo $about_your_self;
-				 ?>
+				<? echo $about_your_self; ?>
 			</td>
 			<td>
-				<?php 
-				echo $i;
-				 ?>
+				<? echo $i; ?>
 			</td>
 		</tr>
 
