@@ -31,49 +31,71 @@
 	 </style>
 
 	<h1>
+
 	<?	echo $title; ?>
+	
 	</h1>
 	<table>
 		<tr>
 			<td>
+
 				<? echo $name; ?>
+
 			</td>
 			<td>
+
 				<? echo $a; ?>
+
 			</td>
 		</tr>
 		<tr>
 			<td>
+
 				<? echo $age; ?>
+
 			</td>
 			<td>
+
 				<? echo $b; ?>
+
 			</td>
 		</tr>
 		<tr>
 			<td>
+
 				<? echo $mail; ?>
+
 			</td>
 			<td>
 				<a href="mailto:gor20@tut.by">
+
 					<? echo $c; ?>
+
 				</a>	 
 			</td>
 		</tr>
 		<tr>
 			<td>
+
 				<? echo $city; ?>
+
 			</td>
 			<td>
+
 				<? echo $d; ?>
+
 			</td>
 		</tr>
 		<tr>
 			<td>
+
 				<? echo $about_your_self; ?>
+
 			</td>
 			<td>
+
 				<? echo $i; ?>
+
 			</td>
 		</tr>
 
