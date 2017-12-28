@@ -18,7 +18,6 @@ while(true){
 	break 1;
 }elseif($one == $user){
 	echo "задуманное число входит в числовой ряд ";
-	break 2;
 }
 	$three = $one;
 	$one += $two;
