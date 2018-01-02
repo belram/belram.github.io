@@ -14,13 +14,15 @@ $second_name = [];
 
 foreach($animal as $key => $value){
 	foreach ($value as $two_words) {
-		//Задаем условие, если переменная с животным имеет пробел и состоит из 2 слов, то делим каждое слово каждый раз при проходе на 2 элемента массива, что бы потом перемешать 2-ые слова.
-		if((strpos($two_words, ' ') != false) && (str_word_count($two_words) == 2)){
-			$middle = explode(" ", $two_words);
+		//Разбиваем сова на элементы массива (для каждого слова перезаписываемого), делаем проверку - если в массиве 2 элемента,
+		//записываем их в разные массивы, что бы потом перемешать 2-ые слова.
+		$middle = [];
+		$middle = explode(" ", $two_words);
+		if(count($middle) == 2){
 			//В первом массиве 1-ые слова
 			$first_name[] = $middle[0];
 			//Во втором, вторые
-    		$second_name[] = $middle[1];
+    			$second_name[] = $middle[1];
 		}
 	}
 }
@@ -51,19 +53,20 @@ foreach($animal as $key => $value){
 
 	//Делаем ту же проверку, чтобы получить те же исходные слова для сравнения
 	foreach ($value as $two_words) {
-		if((strpos($two_words, ' ') != false) && (str_word_count($two_words) == 2)){
-			$middle = explode(" ", $two_words);
+		$middle = [];
+		$middle = explode(" ", $two_words);
+		if(count($middle) == 2){
 			//Всякий раз берем только первое слово
 			$first_name = $middle[0];
 
 			//Проходим по результатирующему массиву из пред-го задания, берем каждый раз только первое слово каждого элемента и сверяем с оригиналом. При совпадении, значение из перемешанного массива записываем во временный массив.
-    		foreach ($fin as $new_animal) {
+    			foreach ($fin as $new_animal) {
 				$temporary = explode(" ", $new_animal);
 				$first_part = $temporary[0];
 
-	    		if($first_name == $first_part){
-	    			$last_part[] = $new_animal;
-	    		}
+	    			if($first_name == $first_part){
+	    				$last_part[] = $new_animal;
+	    			}
 			}	
 		}
 	}
