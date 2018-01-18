@@ -56,15 +56,19 @@
 	<?php
 
 	if(isset($_FILES['myfile']) && !empty($_FILES['myfile']['name'])){
-		 	if($_FILES['myfile']['error'] == UPLOAD_ERR_OK &&
-		 		move_uploaded_file($_FILES['myfile']['tmp_name'], "tests/" . $_FILES['myfile']['name']))
-		 	{
-		 		echo "Файл загружен: " . $_FILES['myfile']['name'] . "\n";		
-		 	}
-		 	else {
-		 		echo "Ошибка: повторите попытку";
-		 	}
+		//Проверка, что загружаемый файл с расширением json
+		if(pathinfo($_FILES['myfile']['name'], PATHINFO_EXTENSION) !== 'json'){
+			echo "Ошибка: допустима отправка тоько json-файлов";
+		}else{
+	 		if($_FILES['myfile']['error'] == UPLOAD_ERR_OK &&
+	 			move_uploaded_file($_FILES['myfile']['tmp_name'], "tests/" . $_FILES['myfile']['name'])){
+	 			echo "Файл загружен: " . $_FILES['myfile']['name'] . "\n";		
+	 		}else {
+	 			echo "Ошибка: повторите попытку";
+	 		}
+		}	
 	}
+		
 	?>
 
 	</div>
