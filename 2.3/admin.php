@@ -1,13 +1,18 @@
 <?php
 if(isset($_FILES['myfile']) && !empty($_FILES['myfile']['name'])){
+	//Проверка, что файл json
+	if (pathinfo($_FILES['myfile']['name'], PATHINFO_EXTENSION) !== 'json') {
+		$errorJson = "Ошибка: допустима отправка только json-файлов";
+	}else{
 	 	if($_FILES['myfile']['error'] == UPLOAD_ERR_OK &&
 	 		move_uploaded_file($_FILES['myfile']['tmp_name'], "tests/" . $_FILES['myfile']['name']))
 	 	{
 	 		header('Location: list.php');		
 	 	}
 	 	else {
-	 		echo 'Ошибка: повторите попытку';
+	 		$errorSend = 'Ошибка: повторите попытку';
 	 	}
+	}
 }
 ?>
 
@@ -65,6 +70,13 @@ if(isset($_FILES['myfile']) && !empty($_FILES['myfile']['name'])){
 		<input class="dispatch" type="submit" value="Отправить">
 	 </form>
 	 <a href="list.php">Список тестов</a>
+	<?    
+	 if($errorJson){
+	 	print '<br>' . $errorJson;
+	 }elseif($errorSend){
+	 	print '<br>' . $errorSend;
+	 }
+	 ?>
 </div>
 
 </body>
