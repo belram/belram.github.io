@@ -16,15 +16,17 @@ if(file_exists($cachefile) && time() - $cachetime < filemtime($cachefile)){
     $jsonString = file_get_contents($cachefile);
 	$data = json_decode($jsonString, true);
 	show_weather($data);
+	print "<br>\n";
+	print "Последнее обновление данных: " . date('H:i', filemtime($cachefile)) . "\n";
 }else{
 	$requestData = $api . $requestBy . '=' . $city . '&' . $if_metric_or_imperial . $formatOfDate . '&APPID=' . $apid;
 	$content = file_get_contents($requestData);
 	$data = json_decode($content, true);
 	show_weather($data);
 	file_put_contents($cachefile, $content);
+	print "<br>\n";
+	print "Последнее обновление данных: " . date('H:i', filemtime($cachefile)) . "\n";
 }
-
-
 
 function get_weather($filename, $api, $requestBy, $city, $apid, $if_metric_or_imperial = '', $formatOfDate = ''){
 	$requestData = $api . $requestBy . '=' . $city . '&' . $if_metric_or_imperial . $formatOfDate . '&APPID=' . $apid;
@@ -34,7 +36,6 @@ function get_weather($filename, $api, $requestBy, $city, $apid, $if_metric_or_im
 	global $next_data;
 	$next_data = $data;
 }
-
 
 function show_weather($next_data){
 
