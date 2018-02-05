@@ -80,7 +80,7 @@
             public function setPrice($price)
             {
                 $this->price = $price;
-	    }
+            }
 
             public function getPrice()
             {
@@ -89,7 +89,7 @@
 
             public function setTitle($title)
             {
-		$this->title = $title;
+                $this->title = $title;
             }
 
              public function getTitle()
@@ -112,7 +112,7 @@
                 $this->sizeOfScreen = $sizeOfScreen;
             }
 
-	    public function getSizeOfScreen()
+            public function getSizeOfScreen()
             {
                 return $this->sizeOfScreen;
             }
@@ -153,17 +153,17 @@
         private $isInBox;
         const SIZE_OF_LOT = 500;
 
-	public function __construct($title, $tipe, $price, $color, $num_of_use, $isInBox)
-	{
+        public function __construct($title, $tipe, $price, $color, $num_of_use, $isInBox)
+        {
             parent::__construct($title, $tipe, $price);
 
             $this->color = $color;
             $this->num_of_use = $num_of_use;
             $this->isInBox = $isInBox;
-	}
+        }
 
         public function canBuyWholesale()
-	{
+        {
             if($this->isInBox == 'Yes'){
                 print "You can buy {$this->title} wholesale, if your order more then " . self::SIZE_OF_LOT . " units.<br>\n";
             }else{
@@ -204,7 +204,7 @@
         const IF_GEN_MOD = .8;
 
         public function __construct($title, $tipe, $price, $standardWeight, $isGeneticallyModified)
-	{
+        {
             parent::__construct($title, $tipe, $price);
 
             $this->standardWeight = $standardWeight;
