@@ -66,8 +66,8 @@
 
     class TV extends SuperProduct implements SecondInterface
         {
-	    private $sizeOfScreen;
-	    private $discount;
+            private $sizeOfScreen;
+            private $discount;
 
             public function __construct($title, $tipe, $price, $sizeOfScreen, $discount)
             {
