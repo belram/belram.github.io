@@ -1,5 +1,5 @@
 <?php
-require_once './conf/config.php';
+require_once __DIR__ . '/../conf/config.php';
 
 function login($login, $password, $db){
 	try {
