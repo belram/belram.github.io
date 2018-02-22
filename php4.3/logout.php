@@ -1,3 +1,3 @@
 <?php
-require_once 'core/session.php';
+require_once __DIR__ . '/core/session.php';
 logout();
