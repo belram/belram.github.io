@@ -1,5 +1,5 @@
 <?php
-	require_once 'core/session.php';
+	require_once __DIR__ . '/core/session.php';
 	if (!isAuthorized()){
 	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Access Denied');
 	echo 'Вы не авторизованы!';
@@ -44,7 +44,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Список дел</title>
 	<meta charset="utf-8">
 </head>
 <style>
