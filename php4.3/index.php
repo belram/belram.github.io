@@ -5,6 +5,6 @@
 	<meta charset="utf-8">
 </head>
 <body>
-	<a href="register.php">Войдите на сайт</a>
+	<a href="/u/bulai/me/lesson_4_3/register.php">Войдите на сайт</a>
 </body>
 </html>
