@@ -28,7 +28,7 @@ if (isPost()) {
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-	<title></title>
+	<title>Авторизация и регистрация</title>
 	<meta charset="utf-8">
 </head>
 <body>
