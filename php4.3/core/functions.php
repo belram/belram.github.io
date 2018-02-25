@@ -2,15 +2,16 @@
 require_once __DIR__ . '/../conf/config.php';
 
 function login($login, $password, $db){
+
 	try {
     $q = $db->query('SELECT id, login, password FROM user');
     $row = $q->fetchAll(PDO::FETCH_ASSOC);
 	} catch (PDOException $e) {
-	    print "Couldn't insert a row: " . $e->getMessage();
+	    print "Couldn't get Login a row: " . $e->getMessage();
 	}
 
     foreach($row as $regUser){
-        if (($regUser['login'] == $login) && (hash_equals($regUser['password'], crypt($password, $regUser['password'])))) {
+        if (($regUser['login'] == $login) && (md5($password) == $regUser['password'])) {
             unset($regUser['password']);
             $_SESSION['user'] = $regUser;
 
@@ -18,6 +19,23 @@ function login($login, $password, $db){
         }
     }
     return false;
+}
+
+function isUser($login, $db){
+	try {
+	    $q = $db->query('SELECT DISTINCT login FROM user');
+	    $row = $q->fetchAll();
+	} catch (PDOException $e) {
+		print "Couldn't insert a row: " . $e->getMessage();
+	}
+
+	foreach ($row as $value) {
+		if (in_array($login, $value)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
 }
 
 function isPost(){
@@ -37,7 +55,7 @@ function getAuthorizedUser() {
 }
 
 function redirect($page) {
-    header("Location: $page.php");
+    header("Location: {$page}.php");
     die;
 }
 
@@ -46,71 +64,6 @@ function logout() {
         session_destroy();
     }
     redirect('index');
-}
-
-class ShowAllInformation
-{
-	public $data;
-	private $db;
-
-	public function __construct($data, $db)
-	{
-		$this->data = $data;
-		$this->db = $db;
-	}
-
-	public function getMyInfo()
-	{
-
-		$db = $this->db;
-		$data = $this->data;
-		$res = 'SELECT user.login AS responsible, task.* FROM user JOIN task ON task.assigned_user_id = user.id AND user_id = ' . $data['id'];
-
-		try {
-		    $q = $db->query($res);
-		    $row = $q->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
-		    print "Couldn't insert a row: " . $e->getMessage();
-		}
-
-		return $row;
-	}
-
-	public function shiftResponsibility()
-	{
-		$db = $this->db;
-		$data = $this->data;
-		$res = 'SELECT id, login FROM user WHERE id <> ' . $data['id'];
-
-		try {
-		    $q = $db->query($res);
-		    $executor = $q->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
-		    print "Couldn't insert a row: " . $e->getMessage();
-		}
-
-		return $executor;
-
-	}
-
-	public function getOtherInfo()
-	{
-
-		$db = $this->db;
-		$data = $this->data;
-		$res = "SELECT user.login AS author, task.* FROM user JOIN task ON task.user_id = user.id
-		        AND task.assigned_user_id = {$data['id']} AND task.user_id <> {$data['id']}";
-
-		try {
-		    $q = $db->query($res);
-		    $row = $q->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
-		    print "Couldn't insert a row: " . $e->getMessage();
-		}
-
-		return $row;
-	}
-
 }
 
 class Registration
@@ -134,13 +87,13 @@ class Registration
 		$password = trim(htmlspecialchars($this->password));
 
 		if((strlen($login) > 0) && (strlen($password) > 0)){
-			$password = crypt($password);
+			$password = md5($password);
 			try {
 				$q = $db->prepare('INSERT INTO user (login, password) VALUES (?,?)');
 				$q->execute(array($login, $password));
 
 			} catch (PDOException $e) {
-				print "Couldn't create user: " . $e->getMessage();
+				print "Couldn't insert createUser1 user: " . $e->getMessage();
 			}
 
 			try {
@@ -148,10 +101,11 @@ class Registration
 				$m = $db->query($res);
 				$row = $m->fetchAll(PDO::FETCH_ASSOC);
 
-				$_SESSION['user'] = $row;
+				$_SESSION['user'] = $row[0];
+				$_SESSION['sss'] = 'AAAAAAAAAAAAAAA';
 
 			} catch (PDOException $e) {
-				print "Couldn't select user: " . $e->getMessage();
+				print "Couldn't get createUser2 user: " . $e->getMessage();
 			}
 
 			return true;
@@ -161,6 +115,98 @@ class Registration
 	}
 }
 
+class ShowAllInformation
+{
+	public $data;
+	private $db;
+
+	public function __construct($data, $db)
+	{
+		$this->data = $data;
+		$this->db = $db;
+	}
+
+	public function getMyInfo()
+	{
+
+		$db = $this->db;
+		$data = $this->data;
+		
+		$row = '';
+		$check = 'SELECT DISTINCT user_id FROM task';
+		try {
+		    $q = $db->query($check);
+		    $users = $q->fetchAll(PDO::FETCH_ASSOC);
+		} catch (PDOException $e) {
+		    print "Couldn't getMyInfo a row: " . $e->getMessage();
+		}	
+
+		foreach ($users as $value) {
+			if (in_array($data['id'], $value)) {
+				$res = 'SELECT user.login AS responsible, task.* FROM user JOIN task ON task.assigned_user_id = user.id AND user_id = ' . $data['id'];
+
+				try {
+				    $q = $db->query($res);
+				    $row = $q->fetchAll(PDO::FETCH_ASSOC);
+				} catch (PDOException $e) {
+				    print "Couldn't getMyInfo a row: " . $e->getMessage();
+				}
+
+			}
+		}
+		return $row;
+	}
+
+	public function shiftResponsibility()
+	{
+		$db = $this->db;
+		$data = $this->data;
+		$res = 'SELECT id, login FROM user WHERE id <> ' . $data['id'];
+
+		try {
+		    $q = $db->query($res);
+		    $executor = $q->fetchAll(PDO::FETCH_ASSOC);
+		} catch (PDOException $e) {
+		    print "Couldn't get shiftResponsibility a row: " . $e->getMessage();
+		}
+
+		return $executor;
+
+	}
+
+	public function getOtherInfo()
+	{
+
+		$db = $this->db;
+		$data = $this->data;
+		$row = '';
+
+		$check = 'SELECT DISTINCT assigned_user_id FROM task';
+		try {
+		    $q = $db->query($check);
+		    $users = $q->fetchAll(PDO::FETCH_ASSOC);
+		} catch (PDOException $e) {
+		    print "Couldn't getMyInfo a row: " . $e->getMessage();
+		}	
+
+		foreach ($users as $value) {
+			if (in_array($data['id'], $value)) {
+
+				$res = "SELECT user.login AS author, task.* FROM user JOIN task ON task.user_id = user.id
+				        AND task.assigned_user_id = {$data['id']} AND task.user_id <> {$data['id']}";
+
+				try {
+				    $q = $db->query($res);
+				    $row = $q->fetchAll(PDO::FETCH_ASSOC);
+				} catch (PDOException $e) {
+				    print "Couldn't get getOtherInfo a row: " . $e->getMessage();
+				}
+			}
+		}
+		return $row;
+	}
+
+}
 
 class DoAct
 {
@@ -183,7 +229,7 @@ class DoAct
 		try {
 			$q = $db->exec($res);
 		} catch (PDOException $e) {
-			print "Couldn't update a row: " . $e->getMessage();
+			print "Couldn't update makeDone a row: " . $e->getMessage();
 		}
 	}
 
@@ -195,7 +241,7 @@ class DoAct
 		try {
 			$q = $db->exec($res);
 		} catch (PDOException $e) {
-			print "Couldn't delite a row: " . $e->getMessage();
+			print "Couldn't delite deliteTask a row: " . $e->getMessage();
 		}
 	}
 }
@@ -219,7 +265,7 @@ class DoAsExecutor
 		try {
 			$q = $db->exec($res);
 		} catch (PDOException $e) {
-			print "Couldn't update a row: " . $e->getMessage();
+			print "Couldn't update DoAsExecutor a row: " . $e->getMessage();
 		}
 	}
 
@@ -231,7 +277,7 @@ class DoAsExecutor
 		try {
 			$q = $db->exec($res);
 		} catch (PDOException $e) {
-			print "Couldn't delite a row: " . $e->getMessage();
+			print "Couldn't deliteTask DoAsExecutor a row: " . $e->getMessage();
 		}
 	}
 }
@@ -260,7 +306,7 @@ class AddTask
 			$q = $db->prepare('INSERT INTO task (user_id, assigned_user_id, description, is_done, date_added) VALUES (?,?,?,?,?)');
 			$q->execute(array($data['id'], $data['id'], $this->newTask, 0, $today));
 		} catch (PDOException $e) {
-			print "Couldn't edit a row: " . $e->getMessage();
+			print "Couldn't edit addNewTask a row: " . $e->getMessage();
 		}
 	}
 }
@@ -290,7 +336,7 @@ class SortBy
 			$nextView = $db->query($res);
     		$row = $nextView->fetchAll(PDO::FETCH_ASSOC);
 		} catch (PDOException $e) {
-			print "Couldn't sort and present a row: " . $e->getMessage();
+			print "Couldn't sort and present sortingBy a row: " . $e->getMessage();
 		}
 
 		return $row;
@@ -319,7 +365,7 @@ class ChangeExecutor
 		try {
 			$nextView = $db->exec($res);
 		} catch (PDOException $e) {
-			print "Couldn't sort and present a row: " . $e->getMessage();
+			print "Couldn't update setNewExecutor a row: " . $e->getMessage();
 		}
 
 	}
