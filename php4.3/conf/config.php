@@ -1,6 +1,6 @@
 <?php
-$host = 'university.netology.ru';
-$dbname = 'global';
+$host = 'localhost';
+$dbname = '';
 $user = '';
 $password = '';
 
