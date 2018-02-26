@@ -10,22 +10,18 @@ if (isPost()) {
 	        print '<hr>';
 	    }
 	} elseif (isset($_POST['register'])) {
-		if (login(getParam('login'), getParam('password'), $db)) {
-	        print '<label>Такой пользователь уже существует в базе данных.</label>';
-	        print '<hr>';
-	    }elseif (!login(getParam('login'), getParam('password'), $db)) {
-	    	if (!isUser(getParam('login'), $db)){
-		    	$obj = new Registration(getParam('login'), getParam('password'), $db);
-		    	if($obj->createUser()){
-		    		redirect('list');
-		    	}else{
-		    		print '<label>Логин и/или пароль менее 1 символа не допустимы!</label>';
-		    	}
+		if (!isUser(getParam('login'), $db)){
+		    $obj = new Registration(getParam('login'), getParam('password'), $db);
+		    if($obj->createUser()){
+		    	redirect('list');
 		    }else{
-		    	print '<label>Выберете другой логин!</label>';
+		    	print '<label>Логин и/или пароль менее 1 символа не допустимы!</label>';
 		    	print '<hr>';
-		    }	
-	    }
+		    }
+		}else{
+		    print '<label>Выберете другой логин для регистрации!</label>';
+		    print '<hr>';
+		}	
 	}
 }
 ?>
