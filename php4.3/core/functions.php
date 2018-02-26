@@ -1,19 +1,18 @@
 <?php
-require_once __DIR__ . '/../conf/config.php';
+    require_once __DIR__ . '/../conf/config.php';
 
-function login($login, $password, $db){
-
+    function login($login, $password, $db){
 	try {
-    $q = $db->query('SELECT id, login, password FROM user');
-    $row = $q->fetchAll(PDO::FETCH_ASSOC);
+            $q = $db->query('SELECT id, login, password FROM user');
+            $row = $q->fetchAll(PDO::FETCH_ASSOC);
 	} catch (PDOException $e) {
 	    print "Couldn't get Login a row: " . $e->getMessage();
 	}
-
+    
     foreach($row as $regUser){
         if (($regUser['login'] == $login) && (md5($password) == $regUser['password'])) {
-            unset($regUser['password']);
-            $_SESSION['user'] = $regUser;
+             unset($regUser['password']);
+             $_SESSION['user'] = $regUser;
 
             return true;
         }
@@ -21,143 +20,131 @@ function login($login, $password, $db){
     return false;
 }
 
-function isUser($login, $db){
-	try {
-	    $q = $db->query('SELECT DISTINCT login FROM user');
+    function isUser($login, $db) {
+        try {
+            $q = $db->query('SELECT DISTINCT login FROM user');
 	    $row = $q->fetchAll();
 	} catch (PDOException $e) {
-		print "Couldn't insert a row: " . $e->getMessage();
+	    print "Couldn't insert a row: " . $e->getMessage();
 	}
-
-	foreach ($row as $value) {
-		if (in_array($login, $value)) {
-			return true;
-		}else{
-			return false;
-		}
+        foreach ($row as $value) {
+	    if (in_array($login, $value)) {
+	        return true;
+	    }else{
+		return false;
+	    }
 	}
-}
-
-function isPost(){
-    return $_SERVER['REQUEST_METHOD'] == 'POST';
-}
-
-function getParam($name){
-    return isset($_REQUEST[$name]) ? trim(htmlspecialchars($_REQUEST[$name])) : null;
-}
-
-function isAuthorized(){
-    return !empty($_SESSION['user']);
-}
-
-function getAuthorizedUser() {
-    return isset($_SESSION['user']) ? $_SESSION['user'] : null;
-}
-
-function redirect($page) {
-    header("Location: {$page}.php");
-    die;
-}
-
-function logout() {
-    if (isAuthorized()) {
-        session_destroy();
     }
-    redirect('index');
-}
 
-class Registration
-{
-	public $login;
-	public $password;
-	private $db;
+    function isPost(){
+        return $_SERVER['REQUEST_METHOD'] == 'POST';
+    }
 
-	public function __construct($login, $password, $db)
-	{
-		$this->login = $login;
-		$this->password = $password;
-		$this->db = $db;
-	}
+    function getParam($name){
+        return isset($_REQUEST[$name]) ? trim(htmlspecialchars($_REQUEST[$name])) : null;
+    }
 
-	public function createUser()
-	{
-		$db = $this->db;
+    function isAuthorized(){
+        return !empty($_SESSION['user']);
+    }
 
-		$login = trim(htmlspecialchars($this->login));
-		$password = trim(htmlspecialchars($this->password));
+    function getAuthorizedUser() {
+        return isset($_SESSION['user']) ? $_SESSION['user'] : null;
+    }
 
-		if((strlen($login) > 0) && (strlen($password) > 0)){
-			$password = md5($password);
-			try {
-				$q = $db->prepare('INSERT INTO user (login, password) VALUES (?,?)');
-				$q->execute(array($login, $password));
+    function redirect($page) {
+        header("Location: {$page}.php");
+        die;
+    }
 
-			} catch (PDOException $e) {
-				print "Couldn't insert createUser1 user: " . $e->getMessage();
-			}
+    function logout() {
+        if (isAuthorized()) {
+            session_destroy();
+        }
+        redirect('index');
+    }
 
-			try {
-				$res = "SELECT id, login FROM user WHERE login = '" . $login . "'";
-				$m = $db->query($res);
-				$row = $m->fetchAll(PDO::FETCH_ASSOC);
+    class Registration
+    {
+        public $login;
+        public $password;
+        private $db;
 
-				$_SESSION['user'] = $row[0];
-				$_SESSION['sss'] = 'AAAAAAAAAAAAAAA';
+        public function __construct($login, $password, $db)
+        {
+            $this->login = $login;
+            $this->password = $password;
+            $this->db = $db;
+        }
 
-			} catch (PDOException $e) {
-				print "Couldn't get createUser2 user: " . $e->getMessage();
-			}
+        public function createUser()
+        {
+            $db = $this->db;
+            $login = trim(htmlspecialchars($this->login));
+            $password = trim(htmlspecialchars($this->password));
+            if ((strlen($login) > 0) && (strlen($password) > 0)) {
+                $password = md5($password);
+                try {
+                    $q = $db->prepare('INSERT INTO user (login, password) VALUES (?,?)');
+                    $q->execute(array($login, $password));
+                } catch (PDOException $e) {
+                    print "Couldn't insert createUser1 user: " . $e->getMessage();
+                }
 
-			return true;
-		}else{
-			return false;
-		}
-	}
-}
+                try {
+                    $res = "SELECT id, login FROM user WHERE login = '" . $login . "'";
+                    $m = $db->query($res);
+                    $row = $m->fetchAll(PDO::FETCH_ASSOC);
+                    $_SESSION['user'] = $row[0];
+                } catch (PDOException $e) {
+                    print "Couldn't get createUser2 user: " . $e->getMessage();
+                }
+                 return true;
+            }else{
+                 return false;
+            }
+        }
+    }
 
-class ShowAllInformation
-{
-	public $data;
-	private $db;
+    class ShowAllInformation
+    {
+        public $data;
+        private $db;
 
-	public function __construct($data, $db)
-	{
-		$this->data = $data;
-		$this->db = $db;
-	}
+        public function __construct($data, $db)
+        {
+            $this->data = $data;
+            $this->db = $db;
+        }
 
-	public function getMyInfo()
-	{
-
-		$db = $this->db;
-		$data = $this->data;
+        public function getMyInfo()
+        {
+            $db = $this->db;
+            $data = $this->data;
 		
-		$row = '';
-		$check = 'SELECT DISTINCT user_id FROM task';
-		try {
-		    $q = $db->query($check);
-		    $users = $q->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
-		    print "Couldn't getMyInfo a row: " . $e->getMessage();
-		}	
+            $row = '';
+            $check = 'SELECT DISTINCT user_id FROM task';
+            try {
+                $q = $db->query($check);
+                $users = $q->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                print "Couldn't getMyInfo a row: " . $e->getMessage();
+            }	
+            foreach ($users as $value) {
+                if (in_array($data['id'], $value)) {
+                    $res = 'SELECT user.login AS responsible, task.* FROM user JOIN task ON task.assigned_user_id = user.id AND user_id = ' . $data['id'];
+                    try {
+                        $q = $db->query($res);
+                        $row = $q->fetchAll(PDO::FETCH_ASSOC);
+                    } catch (PDOException $e) {
+                        print "Couldn't getMyInfo a row: " . $e->getMessage();
+                    }
+                }
+            }
+            return $row;
+        }
 
-		foreach ($users as $value) {
-			if (in_array($data['id'], $value)) {
-				$res = 'SELECT user.login AS responsible, task.* FROM user JOIN task ON task.assigned_user_id = user.id AND user_id = ' . $data['id'];
-
-				try {
-				    $q = $db->query($res);
-				    $row = $q->fetchAll(PDO::FETCH_ASSOC);
-				} catch (PDOException $e) {
-				    print "Couldn't getMyInfo a row: " . $e->getMessage();
-				}
-
-			}
-		}
-		return $row;
-	}
-
-	public function shiftResponsibility()
+        public function shiftResponsibility()
 	{
 		$db = $this->db;
 		$data = $this->data;
@@ -244,6 +231,13 @@ class DoAct
 			print "Couldn't delite deliteTask a row: " . $e->getMessage();
 		}
 	}
+
+
+	public function editTask() 
+	{
+		return $this->id;
+	}
+
 }
 
 class DoAsExecutor
@@ -331,21 +325,18 @@ class SortBy
 		$data = $this->data;
 		$res = "SELECT user.login AS responsible, task.* FROM user JOIN 
 		task ON task.assigned_user_id = user.id AND user_id = {$data['id']} ORDER BY {$this->sort_by}";
-
 		try {
 			$nextView = $db->query($res);
     		$row = $nextView->fetchAll(PDO::FETCH_ASSOC);
 		} catch (PDOException $e) {
 			print "Couldn't sort and present sortingBy a row: " . $e->getMessage();
 		}
-
 		return $row;
 	}
 }
 
 class ChangeExecutor
 {
-
 	private $db;
 	private $newExecutor;
 
@@ -367,6 +358,36 @@ class ChangeExecutor
 		} catch (PDOException $e) {
 			print "Couldn't update setNewExecutor a row: " . $e->getMessage();
 		}
+	}
+}
 
+class EditTask
+{
+	private $db;
+	private $newTask;
+	private $data;
+	private $task_id;
+
+	public function __construct($db, $newTask, $data, $task_id)
+	{
+		$this->db = $db;
+		$this->newTask = $newTask;
+		$this->data = $data;
+		$this->task_id = $task_id;
+	}
+
+	public function rewriteTask()
+	{
+		$db = $this->db;
+		$newTask = $this->newTask;
+		$data = $this->data;
+		$task_id = $this->task_id;
+		$newRes = "UPDATE task SET description = '{$newTask}' WHERE user_id = {$data['id']} AND id = {$task_id}";
+		try {
+			$nextView = $db->exec($newRes);
+		} catch (PDOException $e) {
+			print "Couldn't update rewriteTask: " . $e->getMessage();
+		}
+		$_GET = [];
 	}
 }
