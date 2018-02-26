@@ -12,24 +12,36 @@
 		} elseif ($_GET['action'] === 'delete') {
 			$obj = new DoAct($_GET['id'], $_GET['action'], $db);
 			$row = $obj->deliteTask();
+		} elseif ($_GET['action'] === 'edit') {
+			$obj = new DoAct($_GET['id'], $_GET['action'], $db);
+			$task_id = $obj->editTask();
 		} elseif ($_GET['action'] === 'done1') {
 			$objN = new DoAsExecutor($_GET['id'], $db);
 			$objN->makeDone();
-		}elseif ($_GET['action'] === 'delete1') {
+		} elseif ($_GET['action'] === 'delete1') {
 			$objK = new DoAsExecutor($_GET['id'], $db);
 			$objK->deliteTask();
 		}
 	}
+
+	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit'])) {
+		$obj = new EditTask($db, $_POST['description'], $_SESSION['user'], $task_id);
+		$obj->rewriteTask();
+	}
+
 	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['save'])) {
 		$obj = new AddTask($db, $_POST['description'], $_SESSION['user']);
 		$obj->addNewTask();
 	}
+
 	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['change_executor'])) {
 		$objM = new ChangeExecutor($db, $_POST['new_responsible']);
 		$row = $objM->setNewExecutor();
 	}
+
 	$obj = new ShowAllInformation($_SESSION['user'], $db);
 	$row = $obj->getMyInfo();
+
 	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['sort'])) {
 		$objNext = new SortBy($db, $_POST['sort_by'], $_SESSION['user']);
 		$row = $objNext->sortingBy();
@@ -79,14 +91,20 @@
 	print htmlspecialchars($_SESSION['user']['login']); 
 	?>
 	!!!<h2>
-
 	<h3>Список дел на сегодня</h3>
 		<div style="float: left">
 			<form method="POST">
 			    <input type="text" name="description" placeholder="Описание задачи" />
-			    <input type="submit" name="save" value="Сохранить" />
+					<?php
+						if ((!empty($_GET)) && ($_GET['action'] === 'edit')) {
+							print '<input type="submit" name="edit" value="Сохранить изменение" />';
+						} else {
+							print '<input type="submit" name="save" value="Добавить" />';
+						}
+					?>
 			</form>
 		</div>
+
 	<div style="float: left; margin-left: 20px;">
 		<form method="POST">
 		    <label for="sort">Сортировать по:</label>
@@ -122,6 +140,7 @@
 							print "111'>Выполнено</td>\n";
 						}
 					print "<td>\n";
+						print '<a class=\'col_2\' href="' . '?id=' . htmlspecialchars($value['id']) . '&action=edit">Изменить</a>' . "\n";
 						print '<a class=\'col_2\' href="' . '?id=' . htmlspecialchars($value['id']) . '&action=done">Выполнить</a>' . "\n";
 						print '<a class=\'col_2\' href="' . '?id=' . htmlspecialchars($value['id']) . '&action=delete">Удалить</a>' . "\n";
 					print "</td>\n";
