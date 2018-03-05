@@ -1,5 +1,7 @@
 <?php
     require_once __DIR__ . '/core/session.php';
+
+
     startChange($_GET);
     $obj = new DescriptionTable($_SESSION['id'], $db);
 
@@ -10,26 +12,35 @@
             }
         } elseif ($_GET['action'] === 'rename') {
             $obj->lastParam($_GET['action'], $_GET['nameField']);
-        } elseif ($_GET['action'] === 'changeType') {
-            $obj->lastParam($_GET['action'], $_GET['nameField']);
         }
     }
 
+    if (!empty($_GET) && (count($_GET) === 4)) {
+        if ($_GET['action'] === 'changeType') {
+            $obj->lastParam($_GET['action'], $_GET['nameField'], $_GET['lastType'], $_GET['key']);
+        }
+    }
+    $ifMistake = true;
+    $ifMistake2 = true;
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['rename'])) {
-        $obj->setNewName($_POST['change']);
+        $ifMistake = $obj->setNewName(trim($_POST['change']));
+        if ($ifMistake) {
+            $obj->redirect('describe');
+        }
     }
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['changeType'])) {
-        $obj->setNewType($_POST['change']);
+        $ifMistake2 = $obj->setNewType(trim($_POST['change']));
+        if ($ifMistake2) {
+            $obj->redirect('describe');
+        }
     }
     
     $res = $obj->getDescription();
 
     if (isset($_POST['finish'])) {
-        logout();
+        $obj->logout();
     }
-    
-
 ?>
 
 <!DOCTYPE html>
@@ -64,21 +75,47 @@
     </style>
 
     <h3>Описание таблицы: <?php print $_SESSION['id']; ?> </h3>
+        <?php
 
+            if (isset($_SESSION['rename'])) {
+                print '<h4 style="color: blue;">Переименовать поле</h4>' . "\n";
+                print '<div>' . "\n";
+                    print '<form method="POST">' . "\n";
+                        print '<span>Предыдущее имя: "' . $_SESSION['rename'] . "\"<span>\n";
+                        print '<br>Новое имя значение: ' . "\n";
+                        print '<input type="text" name="change" placeholder="Новое имя или тип поля" />' . "\n";
+                        print '<input type="submit" name="rename" value="Переименовать" />' . "\n";
+                    print '</form>' . "\n";
+                print '</div>' . "\n";
+            }
 
-    <h4 style="color: blue;">Переименовать или изменить тип поля</h4>
-        <div>
-            <form method="POST">
-                <input type="text" name="change" placeholder="Новое имя или тип поля" />
-                    <?php
-                        if ((!empty($_GET)) && ($_GET['action'] === 'rename')) {
-                            print '<input type="submit" name="rename" value="Переименовать/Изменить тип" />';
-                        } else {
-                            print '<input type="submit" name="changeType" value="Переименовать/Изменить тип" />';
-                        }
-                    ?>
-            </form>
-        </div>
+            if (!$ifMistake) {
+                print '<hr>';
+                print '<span style="color: red;">Недопустимое имя для поля<span>';
+                print '<hr>';
+            }
+
+            if (isset($_SESSION['changeType'])) {
+                print '<h4 style="color: blue;">Изменить тип</h4>' . "\n";
+                print '<div>' . "\n";
+                    print '<form method="POST">' . "\n";
+                        print '<span>Предыдущий тип поля: "' . $_SESSION['lastType'] . "\"<span>\n";
+                        print '<br>Новый тип: ' . "\n";
+
+                        print '<input type="text" name="change" placeholder="Новый тип поля" />' . "\n";
+
+                        print '<input type="submit" name="changeType" value="Изменить тип" />' . "\n";
+                    print '</form>' . "\n";
+                print '</div>' . "\n";
+            }
+
+            if (!$ifMistake2) {
+                print '<hr>';
+                print '<span style="color: red;">Недопустимый тип для поля<span>';
+                print '<hr>';
+            }
+
+        ?>
 
     <table class="col2">
         <tr>
@@ -100,7 +137,7 @@
                         print '<td><a class="col_1" style="color: green" href="?nameField='
                          . htmlspecialchars($value['Field']) . '&action=rename">' . $value['Field'] . '</a></td>' . "\n";
                         print '<td><a class="col_1" style="color: blue" href="?nameField='
-                         . htmlspecialchars($value['Field']) . '&action=changeType">' . $value['Type'] . '</a></td>' . "\n";
+                         . htmlspecialchars($value['Field']) . '&lastType=' . $value['Type'] . '&key=' . $value['Key'] . '&action=changeType">' . $value['Type'] . '</a></td>' . "\n";
                     print '<td>' . $value['Null'] . "</td>\n";
                     print '<td>' . $value['Key'] . "</td>\n";
                     print '<td>' . $value['Default'] . "</td>\n";
@@ -111,9 +148,7 @@
                     print "</tr>\n";
                     $m++;
                 }
-
             }
-
         ?>
     </table>
 
@@ -122,6 +157,5 @@
             <input type="submit" name="finish" value="Завершить просмотр" />
         </form>
     </div>
-
 </body>
 </html>
