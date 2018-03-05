@@ -52,8 +52,6 @@ class DescriptionTable
 		return true;
 	}
 
-	
-
 	public function setNewName ($newName) 
 	{
 		$id = $this->id;
@@ -74,7 +72,6 @@ class DescriptionTable
 		    return true;
 		}
 	}
-
 
 	public function setNewType ($redyRequest) 
 	{
