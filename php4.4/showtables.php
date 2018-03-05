@@ -1,6 +1,5 @@
 <?php
     require_once __DIR__ . '/core/functions_1.php';
-
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -57,7 +56,6 @@
                     print '<td>' . htmlspecialchars($value[$param]) . "</td>\n";
                     print '<td>';
                         print '<a class="col_1" href="describe.php' . '?id=' . htmlspecialchars($value[$param]) . '&action=description">Смотреть</a>' . "\n";
-                        // print '<a class="col_1" href="describe.php' . '?id=' . htmlspecialchars($value[$param]) . '&action=change">Изменить</a>' . "\n";
                     print "</td>\n";
                     print "</tr>\n";
                     $i++;
@@ -65,6 +63,5 @@
             } 
         ?>        
     </table>
-
 </body>
 </html>
