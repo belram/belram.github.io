@@ -27,13 +27,13 @@
 	} catch (PDOException $e) {
 	    print "Couldn't insert a row: " . $e->getMessage();
 	}
-        foreach ($row as $value) {
-	    if (in_array($login, $value)) {
-	        return true;
-	    }else{
-		return false;
-	    }
+	foreach ($row as $value) {
+		if (in_array($login, $value)) {
+		    return true;
+		}
 	}
+
+	return false;
     }
 
     function isPost(){
